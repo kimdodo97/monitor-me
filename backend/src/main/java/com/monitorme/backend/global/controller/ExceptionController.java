@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Slf4j
 @ControllerAdvice
@@ -28,13 +29,13 @@ public class ExceptionController {
                 .body(body);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(HttpClientErrorException.class)
     @ResponseBody
     public ErrorResponse invalidExceptionHandler(MethodArgumentNotValidException exception){
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("400")
-                .message("잘못된 요청입니다.")
+                .code("404")
+                .message("외부 서버와 통신이 실패했습니다. 다시 시도해주세요")
                 .build();
 
         for (FieldError fieldError : exception.getFieldErrors()){
