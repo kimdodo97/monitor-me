@@ -1,0 +1,6 @@
+[submodule "backend/monitor-me-properties"]
+	path = backend/monitor-me-properties
+	url = https://github.com/kimdodo97/monitor-me-properties.git
+[submodule "monitor-me-properties"]
+	path = monitor-me-properties
+	url = https://github.com/kimdodo97/monitor-me-properties.git

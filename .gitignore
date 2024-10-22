@@ -3,6 +3,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
+.idea
 ./.idea/**
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -394,3 +395,5 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+backend/src/main/resources/application-oauth.yml
+backend/src/main/resources/application-oauth.yml
