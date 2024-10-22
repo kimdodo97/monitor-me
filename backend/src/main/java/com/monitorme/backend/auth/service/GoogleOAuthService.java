@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+
+import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,13 +22,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class GoogleOAuthService {
     private final RestClient restClient;
-
-    private final String URI = "https://oauth2.googleapis.com/token";
-    private final String USERINFO_URL="https://www.googleapis.com/oauth2/v1/userinfo";
-    private final String GRANT_TYPE = "authorization_code";
+    private static String URI = "https://oauth2.googleapis.com/token";
+    private static String USERINFO_URL="https://www.googleapis.com/oauth2/v1/userinfo";
+    private static String GRANT_TYPE = "authorization_code";
 
     @Value("${oauth2.redirect-uri}")
     private String REDIRECT_URI;
@@ -37,8 +37,8 @@ public class GoogleOAuthService {
     @Value("${oauth2.client-secret}")
     private String CLIENT_SECRET;
 
-    public GoogleOAuthService() {
-        this.restClient = RestClient.create();
+    public GoogleOAuthService(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder.build();
     }
 
     public GoogleAuthResponse getOAuthToken(String code) throws HttpClientErrorException{
@@ -65,15 +65,17 @@ public class GoogleOAuthService {
         return responseEntity.getBody();
     }
 
-    public void getUserInfo(String accessToken) throws HttpClientErrorException{
+    public GoogleUseInfo getUserInfo(String accessToken) throws HttpClientErrorException{
         ResponseEntity<GoogleUseInfo> responseEntity = restClient.get()
                 .uri(USERINFO_URL)
-                .header("Authorization", "Bearer" + accessToken)
+                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .toEntity(GoogleUseInfo.class);
 
         if (responseEntity.getStatusCode().value() != 200){
             throw new GoogleUserInfoException();
         }
+
+        return responseEntity.getBody();
     }
 }
