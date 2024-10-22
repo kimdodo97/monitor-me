@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class GoogleUseInfo {
+    @JsonProperty("social_id")
     private String socialId;
     private String email;
 
